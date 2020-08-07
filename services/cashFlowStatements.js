@@ -8,39 +8,32 @@ const axios = require('axios'),
 router.use(cors({ origin: 'http://localhost:4000' }), bodyParser.json());
 
 const { API_KEY, getCompanyTickerFromURL } = require('../utils');
+const { sendSuccessResponse, sendErrorResponse } = require('./common');
 
 const baseURL =
 	'https://financialmodelingprep.com/api/v3/financials/cash-flow-statement';
 
-// Common utility functions for sending out responses
-sendSuccessResponse = (responseObject = {}, options = {}) => {
-	responseObject.send({
-		success: true,
-		code: 200,
-		message: options.message || undefined,
-		payload: options.payload || undefined,
-	});
-};
-
-sendErrorResponse = (responseObject = {}, options = {}) => {
-	responseObject.send({
-		success: false,
-		code: options.code || 404,
-		message:
-			options.message ||
-			'There was some error while processing your request. For more information, please see server console.',
-	});
-};
-
 router.get('/', async (request, response) => {
-	const ticker = getCompanyTickerFromURL(request.baseUrl);
+	try {
+		const ticker = getCompanyTickerFromURL(request.baseUrl);
 
-	const cashFlowStatements = await fetchCompanyCashFlowStatements(ticker);
+		const cashFlowStatements = await fetchCompanyCashFlowStatements(ticker);
 
-	return sendSuccessResponse(response, {
-		message: 'GO GO GO...!!!',
-		payload: { cashFlowStatements },
-	});
+		return sendSuccessResponse(response, {
+			message: 'GO GO GO...!!!',
+			payload: { cashFlowStatements },
+		});
+	} catch (error) {
+		console.error(
+			`There was an error while getting ${ticker}'s cash flow statements. Error: ${error}`
+		);
+
+		return sendErrorResponse(response, {
+			code: 411,
+			message: 'Request failed.',
+			payload: { error },
+		});
+	}
 });
 
 const fetchCompanyCashFlowStatements = async (ticker) => {
@@ -54,7 +47,7 @@ const fetchCompanyCashFlowStatements = async (ticker) => {
 		console.log(
 			`Error occured while fetching company's cash flow statements. Error desc: ${error}`
 		);
-		return null;
+		return error;
 	}
 };
 

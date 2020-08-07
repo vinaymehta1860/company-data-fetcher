@@ -13,12 +13,14 @@ const {
 	balanceSheetRouter,
 	cashFlowStatementRouter,
 	incomeStatementRouter,
+	earningsCalendarRouter,
 } = require('./services');
 
 // Individual statement mapping
 app.use('/company/:ticker/balanceSheet', balanceSheetRouter);
 app.use('/company/:ticker/incomeStatement', incomeStatementRouter);
 app.use('/company/:ticker/cashFlowStatement', cashFlowStatementRouter);
+app.use('/upcomingearnings', earningsCalendarRouter);
 
 app.listen(PORT, () => {
 	console.log(`Server running on port ${PORT}`);
