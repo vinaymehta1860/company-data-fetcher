@@ -20,7 +20,7 @@ const {
 app.use('/company/:ticker/balanceSheet', balanceSheetRouter);
 app.use('/company/:ticker/incomeStatement', incomeStatementRouter);
 app.use('/company/:ticker/cashFlowStatement', cashFlowStatementRouter);
-app.use('/upcomingearnings', earningsCalendarRouter);
+app.use('/earningscalendar', earningsCalendarRouter);
 
 app.listen(PORT, () => {
 	console.log(`Server running on port ${PORT}`);
