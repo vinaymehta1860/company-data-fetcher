@@ -8,39 +8,32 @@ const axios = require('axios'),
 router.use(cors({ origin: 'http://localhost:4000' }), bodyParser.json());
 
 const { API_KEY, getCompanyTickerFromURL } = require('../utils');
+const { sendSuccessResponse, sendErrorResponse } = require('./common');
 
 const baseURL =
 	'https://financialmodelingprep.com/api/v3/financials/balance-sheet-statement';
 
-// Common utility functions for sending out responses
-sendSuccessResponse = (responseObject = {}, options = {}) => {
-	responseObject.send({
-		success: true,
-		code: 200,
-		message: options.message || undefined,
-		payload: options.payload || undefined,
-	});
-};
-
-sendErrorResponse = (responseObject = {}, options = {}) => {
-	responseObject.send({
-		success: false,
-		code: options.code || 404,
-		message:
-			options.message ||
-			'There was some error while processing your request. For more information, please see server console.',
-	});
-};
-
 router.get('/', async (request, response) => {
-	const ticker = getCompanyTickerFromURL(request.baseUrl);
+	try {
+		const ticker = getCompanyTickerFromURL(request.baseUrl);
 
-	const balanceSheets = await fetchCompanyBalanceSheets(ticker);
+		const balanceSheets = await fetchCompanyBalanceSheets(ticker);
 
-	return sendSuccessResponse(response, {
-		message: 'GO GO GO...!!!',
-		payload: { balanceSheets },
-	});
+		return sendSuccessResponse(response, {
+			message: 'GO GO GO...!!!',
+			payload: { balanceSheets },
+		});
+	} catch (error) {
+		console.error(
+			`There was an error while getting ${ticker}'s balance sheets. Error: ${error}`
+		);
+
+		return sendErrorResponse(response, {
+			code: 411,
+			message: 'Request failed.',
+			payload: { error },
+		});
+	}
 });
 
 const fetchCompanyBalanceSheets = async (ticker) => {
@@ -54,7 +47,7 @@ const fetchCompanyBalanceSheets = async (ticker) => {
 		console.log(
 			`Error occured while fetching company's balance sheet. Error desc: ${error}`
 		);
-		return null;
+		return error;
 	}
 };
 

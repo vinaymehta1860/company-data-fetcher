@@ -7,25 +7,22 @@ const axios = require('axios'),
 // Router configuration
 router.use(cors({ origin: 'http://localhost:4000' }), bodyParser.json());
 
-const { API_KEY, getCompanyTickerFromURL } = require('../utils');
+const { API_KEY } = require('../utils');
 const { sendSuccessResponse, sendErrorResponse } = require('./common');
 
-const baseURL =
-	'https://financialmodelingprep.com/api/v3/financials/income-statement';
+const baseURL = 'https://financialmodelingprep.com/api/v3/earning_calendar';
 
 router.get('/', async (request, response) => {
 	try {
-		const ticker = getCompanyTickerFromURL(request.baseUrl);
-
-		const incomeStatements = await fetchCompanyIncomeStatements(ticker);
+		const upcomingEarnings = await fetchEarningsCalendar();
 
 		return sendSuccessResponse(response, {
 			message: 'GO GO GO...!!!',
-			payload: { incomeStatements },
+			payload: { upcomingEarnings },
 		});
 	} catch (error) {
 		console.error(
-			`There was an error while getting ${ticker}'s income statements. Error: ${error}`
+			`There was an error while getting earnigns calendar. Error: ${error}`
 		);
 
 		return sendErrorResponse(response, {
@@ -36,16 +33,16 @@ router.get('/', async (request, response) => {
 	}
 });
 
-const fetchCompanyIncomeStatements = async (ticker) => {
-	const requestURL = baseURL + `/${ticker}?period=quarter&apikey=${API_KEY}`;
-
+const fetchEarningsCalendar = async () => {
+	const requestURL = baseURL + `?apikey=${API_KEY}`;
+	console.log(`URI: ${requestURL}`);
 	try {
-		const incomeStatements = await axios.get(requestURL);
+		const upcomingEarnings = await axios.get(requestURL);
 
-		return incomeStatements.data;
+		return upcomingEarnings.data;
 	} catch (error) {
 		console.log(
-			`Error occured while fetching company's income statements. Error desc: ${error}`
+			`Error occured while fetching earnings calendar. Error desc: ${error}`
 		);
 		return error;
 	}
