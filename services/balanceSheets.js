@@ -11,7 +11,7 @@ const { API_KEY, getCompanyTickerFromURL } = require('../utils');
 const { sendSuccessResponse, sendErrorResponse } = require('./common');
 
 const baseURL =
-	'https://financialmodelingprep.com/api/v3/financials/balance-sheet-statement';
+	'https://financialmodelingprep.com/api/v3/balance-sheet-statement';
 
 router.get('/', async (request, response) => {
 	try {
