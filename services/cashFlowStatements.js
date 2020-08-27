@@ -10,8 +10,7 @@ router.use(cors({ origin: 'http://localhost:4000' }), bodyParser.json());
 const { API_KEY, getCompanyTickerFromURL } = require('../utils');
 const { sendSuccessResponse, sendErrorResponse } = require('./common');
 
-const baseURL =
-	'https://financialmodelingprep.com/api/v3/financials/cash-flow-statement';
+const baseURL = 'https://financialmodelingprep.com/api/v3/cash-flow-statement';
 
 router.get('/', async (request, response) => {
 	try {
