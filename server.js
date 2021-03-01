@@ -11,6 +11,7 @@ app.use((request, response, next) => {
 // Import other services here
 const {
 	companyInfo,
+	companyStats,
 	balanceSheetRouter,
 	cashFlowStatementRouter,
 	incomeStatementRouter,
@@ -19,6 +20,7 @@ const {
 
 // Individual statement mapping
 app.use('/company/:ticker', companyInfo);
+app.use('/company/:ticker/stats', companyStats);
 app.use('/company/:ticker/balanceSheet', balanceSheetRouter);
 app.use('/company/:ticker/incomeStatement', incomeStatementRouter);
 app.use('/company/:ticker/cashFlowStatement', cashFlowStatementRouter);

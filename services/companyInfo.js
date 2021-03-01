@@ -8,8 +8,8 @@ const axios = require('axios'),
 router.use(cors({ origin: 'http://localhost:4000' }), bodyParser.json());
 
 const {
-	IEX_API_KEY,
-	IEX_BASE_URL,
+	FMPCLOUD_API_KEY,
+	FMPCLOUD_BASE_URL,
 	getCompanyTickerFromURL,
 } = require('../utils');
 const { sendSuccessResponse, sendErrorResponse } = require('./common');
@@ -38,15 +38,18 @@ router.get('/', async (request, response) => {
 });
 
 const fetchCompanyData = async (ticker) => {
-	const requestURL =
-		IEX_BASE_URL + `/stock/${ticker}/company?token=${IEX_API_KEY}`;
+	if (!ticker) {
+		return null;
+	}
+
+	const requestURL = `${FMPCLOUD_BASE_URL}/profile/${ticker}?apikey=${FMPCLOUD_API_KEY}`;
 
 	try {
 		const companyData = await axios.get(requestURL);
 
 		return companyData.data;
 	} catch (error) {
-		console.log(
+		console.error(
 			`Error occured while fetching company's data. Error desc: ${error}`
 		);
 
