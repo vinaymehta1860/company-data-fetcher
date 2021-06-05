@@ -21,9 +21,9 @@ const {
 // Individual statement mapping
 app.use('/company/:ticker', companyInfo);
 app.use('/company/:ticker/stats', companyStats);
-app.use('/company/:ticker/balanceSheet', balanceSheetRouter);
-app.use('/company/:ticker/incomeStatement', incomeStatementRouter);
-app.use('/company/:ticker/cashFlowStatement', cashFlowStatementRouter);
+app.use('/company/:ticker/balancesheet', balanceSheetRouter);
+app.use('/company/:ticker/incomestatement', incomeStatementRouter);
+app.use('/company/:ticker/cashflowstatement', cashFlowStatementRouter);
 app.use('/earningscalendar', earningsCalendarRouter);
 
 app.listen(PORT, () => {

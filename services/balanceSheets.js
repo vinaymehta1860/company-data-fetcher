@@ -7,7 +7,7 @@ const axios = require('axios'),
 // Router configuration
 router.use(cors({ origin: 'http://localhost:4000' }), bodyParser.json());
 
-const { API_KEY, getCompanyTickerFromURL } = require('../utils');
+const { FINANCIAL_MODELING_GREP_API_KEY, getCompanyTickerFromURL } = require('../utils');
 const { sendSuccessResponse, sendErrorResponse } = require('./common');
 
 const baseURL =
@@ -37,7 +37,7 @@ router.get('/', async (request, response) => {
 });
 
 const fetchCompanyBalanceSheets = async (ticker) => {
-	const requestURL = baseURL + `/${ticker}?period=quarter&apikey=${API_KEY}`;
+	const requestURL = baseURL + `/${ticker}?period=quarter&apikey=${FINANCIAL_MODELING_GREP_API_KEY}`;
 
 	try {
 		const balanceSheets = await axios.get(requestURL);
