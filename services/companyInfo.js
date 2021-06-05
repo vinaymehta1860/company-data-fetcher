@@ -8,9 +8,9 @@ const axios = require('axios'),
 router.use(cors({ origin: 'http://localhost:4000' }), bodyParser.json());
 
 const {
-	FMPCLOUD_API_KEY,
-	FMPCLOUD_BASE_URL,
-	getCompanyTickerFromURL,
+	ALPHA_VANTAGE_API_KEY,
+	ALPHA_VANTAGE_BASE_URL,
+	getCompanyTickerFromURL
 } = require('../utils');
 const { sendSuccessResponse, sendErrorResponse } = require('./common');
 
@@ -42,7 +42,7 @@ const fetchCompanyData = async (ticker) => {
 		return null;
 	}
 
-	const requestURL = `${FMPCLOUD_BASE_URL}/profile/${ticker}?apikey=${FMPCLOUD_API_KEY}`;
+	const requestURL = `${ALPHA_VANTAGE_BASE_URL}?function=OVERVIEW&symbol=${ticker}&apikey=${ALPHA_VANTAGE_API_KEY}`;
 
 	try {
 		const companyData = await axios.get(requestURL);

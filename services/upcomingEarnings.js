@@ -7,10 +7,11 @@ const axios = require('axios'),
 // Router configuration
 router.use(cors({ origin: 'http://localhost:4000' }), bodyParser.json());
 
-const { FINANCIAL_MODELING_GREP_API_KEY } = require('../utils');
+const {
+	ALPHA_VANTAGE_API_KEY,
+	ALPHA_VANTAGE_BASE_URL
+} = require('../utils');
 const { sendSuccessResponse, sendErrorResponse } = require('./common');
-
-const baseURL = 'https://financialmodelingprep.com/api/v3/earning_calendar';
 
 router.get('/', async (request, response) => {
 	try {
@@ -34,8 +35,8 @@ router.get('/', async (request, response) => {
 });
 
 const fetchEarningsCalendar = async () => {
-	const requestURL = baseURL + `?apikey=${FINANCIAL_MODELING_GREP_API_KEY}`;
-	console.log(`URI: ${requestURL}`);
+	const requestURL = `${ALPHA_VANTAGE_BASE_URL}?function=EARNINGS_CALENDAR&apikey=${ALPHA_VANTAGE_API_KEY}`;
+
 	try {
 		const upcomingEarnings = await axios.get(requestURL);
 

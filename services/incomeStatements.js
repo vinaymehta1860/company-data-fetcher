@@ -7,10 +7,12 @@ const axios = require('axios'),
 // Router configuration
 router.use(cors({ origin: 'http://localhost:4000' }), bodyParser.json());
 
-const { FINANCIAL_MODELING_GREP_API_KEY, getCompanyTickerFromURL } = require('../utils');
+const {
+	ALPHA_VANTAGE_API_KEY,
+	ALPHA_VANTAGE_BASE_URL,
+	getCompanyTickerFromURL
+} = require('../utils');
 const { sendSuccessResponse, sendErrorResponse } = require('./common');
-
-const baseURL = 'https://financialmodelingprep.com/api/v3/income-statement';
 
 router.get('/', async (request, response) => {
 	try {
@@ -36,7 +38,7 @@ router.get('/', async (request, response) => {
 });
 
 const fetchCompanyIncomeStatements = async (ticker) => {
-	const requestURL = baseURL + `/${ticker}?period=quarter&apikey=${FINANCIAL_MODELING_GREP_API_KEY}`;
+	const requestURL = `${ALPHA_VANTAGE_BASE_URL}?function=INCOME_STATEMENT&symbol=${ticker}&apikey=${ALPHA_VANTAGE_API_KEY}`
 
 	try {
 		const incomeStatements = await axios.get(requestURL);
@@ -44,7 +46,7 @@ const fetchCompanyIncomeStatements = async (ticker) => {
 		return incomeStatements.data;
 	} catch (error) {
 		console.log(
-			`Error occured while fetching company's income statements. Error desc: ${error}`
+			`Error occured while fetching company's income statements. Error desc: '${error}'`
 		);
 		return error;
 	}
