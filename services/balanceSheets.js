@@ -5,13 +5,14 @@ const axios = require('axios'),
 	router = express.Router();
 
 // Router configuration
-router.use(cors({ origin: 'http://localhost:4000' }), bodyParser.json());
+router.use(cors({ origin: ['http://localhost:4000'] }), bodyParser.json());
 
-const { FINANCIAL_MODELING_GREP_API_KEY, getCompanyTickerFromURL } = require('../utils');
+const {
+	ALPHA_VANTAGE_API_KEY,
+	ALPHA_VANTAGE_BASE_URL,
+	getCompanyTickerFromURL
+} = require('../utils');
 const { sendSuccessResponse, sendErrorResponse } = require('./common');
-
-const baseURL =
-	'https://financialmodelingprep.com/api/v3/balance-sheet-statement';
 
 router.get('/', async (request, response) => {
 	try {
@@ -21,7 +22,7 @@ router.get('/', async (request, response) => {
 
 		return sendSuccessResponse(response, {
 			message: 'GO GO GO...!!!',
-			payload: { balanceSheets },
+			payload: balanceSheets,
 		});
 	} catch (error) {
 		console.error(
@@ -37,7 +38,7 @@ router.get('/', async (request, response) => {
 });
 
 const fetchCompanyBalanceSheets = async (ticker) => {
-	const requestURL = baseURL + `/${ticker}?period=quarter&apikey=${FINANCIAL_MODELING_GREP_API_KEY}`;
+	const requestURL = `${ALPHA_VANTAGE_BASE_URL}?function=BALANCE_SHEET&symbol=${ticker}&apikey=${ALPHA_VANTAGE_API_KEY}`
 
 	try {
 		const balanceSheets = await axios.get(requestURL);

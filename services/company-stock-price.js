@@ -18,15 +18,15 @@ router.get('/', async (request, response) => {
 	try {
 		const ticker = getCompanyTickerFromURL(request.baseUrl);
 
-		const incomeStatements = await fetchCompanyIncomeStatements(ticker);
+		const companyStockInformation = await fetchCompanyStockInformation(ticker);
 
 		return sendSuccessResponse(response, {
 			message: 'GO GO GO...!!!',
-			payload: incomeStatements,
+			payload: companyStockInformation,
 		});
-	} catch (error) {
+	} catch (e) {
 		console.error(
-			`There was an error while getting ${ticker}'s income statements. Error: ${error}`
+			`There was an error while getting ${ticker}'s stock information. Error: ${error}`
 		);
 
 		return sendErrorResponse(response, {
@@ -37,17 +37,22 @@ router.get('/', async (request, response) => {
 	}
 });
 
-const fetchCompanyIncomeStatements = async (ticker) => {
-	const requestURL = `${ALPHA_VANTAGE_BASE_URL}?function=INCOME_STATEMENT&symbol=${ticker}&apikey=${ALPHA_VANTAGE_API_KEY}`
+const fetchCompanyStockInformation = async (ticker) => {
+	if (!ticker) {
+		return null;
+	}
+
+	const requestURL = `${ALPHA_VANTAGE_BASE_URL}?function=GLOBAL_QUOTE&symbol=${ticker}&apikey=${ALPHA_VANTAGE_API_KEY}`;
 
 	try {
-		const incomeStatements = await axios.get(requestURL);
+		const companyStockInformation = await axios.get(requestURL);
 
-		return incomeStatements.data;
+		return companyStockInformation.data;
 	} catch (error) {
-		console.log(
-			`Error occured while fetching company's income statements. Error desc: '${error}'`
+		console.error(
+			`Error occured while fetching company's stock pricing information. Error desc: ${error}`
 		);
+
 		return error;
 	}
 };
