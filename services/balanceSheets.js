@@ -5,7 +5,7 @@ const axios = require('axios'),
 	router = express.Router();
 
 // Router configuration
-router.use(cors({ origin: 'http://localhost:4000' }), bodyParser.json());
+router.use(cors({ origin: ['http://localhost:4000'] }), bodyParser.json());
 
 const {
 	ALPHA_VANTAGE_API_KEY,
@@ -22,7 +22,7 @@ router.get('/', async (request, response) => {
 
 		return sendSuccessResponse(response, {
 			message: 'GO GO GO...!!!',
-			payload: { balanceSheets },
+			payload: balanceSheets,
 		});
 	} catch (error) {
 		console.error(

@@ -9,24 +9,21 @@ router.use(cors({ origin: ['http://localhost:4000'] }), bodyParser.json());
 
 const {
 	ALPHA_VANTAGE_API_KEY,
-	ALPHA_VANTAGE_BASE_URL,
-	getCompanyTickerFromURL
+	ALPHA_VANTAGE_BASE_URL
 } = require('../utils');
 const { sendSuccessResponse, sendErrorResponse } = require('./common');
 
 router.get('/', async (request, response) => {
 	try {
-		const ticker = getCompanyTickerFromURL(request.baseUrl);
-
-		const incomeStatements = await fetchCompanyIncomeStatements(ticker);
+		const ipoCalendar = await fetchIPOCalendar();
 
 		return sendSuccessResponse(response, {
 			message: 'GO GO GO...!!!',
-			payload: incomeStatements,
+			payload: ipoCalendar,
 		});
 	} catch (error) {
 		console.error(
-			`There was an error while getting ${ticker}'s income statements. Error: ${error}`
+			`There was an error while getting IPO calendar. Error: ${error}`
 		);
 
 		return sendErrorResponse(response, {
@@ -37,16 +34,16 @@ router.get('/', async (request, response) => {
 	}
 });
 
-const fetchCompanyIncomeStatements = async (ticker) => {
-	const requestURL = `${ALPHA_VANTAGE_BASE_URL}?function=INCOME_STATEMENT&symbol=${ticker}&apikey=${ALPHA_VANTAGE_API_KEY}`
+const fetchIPOCalendar = async () => {
+	const requestURL = `${ALPHA_VANTAGE_BASE_URL}?function=IPO_CALENDAR&apikey=${ALPHA_VANTAGE_API_KEY}`;
 
 	try {
-		const incomeStatements = await axios.get(requestURL);
+		const ipoCalendar = await axios.get(requestURL);
 
-		return incomeStatements.data;
+		return ipoCalendar.data;
 	} catch (error) {
 		console.log(
-			`Error occured while fetching company's income statements. Error desc: '${error}'`
+			`Error occured while fetching IPO calendar. Error desc: ${error}`
 		);
 		return error;
 	}
