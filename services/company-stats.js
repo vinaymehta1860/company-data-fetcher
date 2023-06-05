@@ -2,17 +2,13 @@ const axios = require('axios'),
 	express = require('express'),
 	bodyParser = require('body-parser'),
 	cors = require('cors'),
-	router = express.Router();
+	router = express.Router(),
+	{ getCompanyTickerFromURL } = require('../utils'),
+	{ sendSuccessResponse, sendErrorResponse } = require('./common'),
+	{ FMPCLOUD_API_KEY, FMPCLOUD_BASE_URL } = require("../config");
 
 // Router configuration
-router.use(cors({ origin: 'http://localhost:4000' }), bodyParser.json());
-
-const {
-	FMPCLOUD_API_KEY,
-	FMPCLOUD_BASE_URL,
-	getCompanyTickerFromURL,
-} = require('../utils');
-const { sendSuccessResponse, sendErrorResponse } = require('./common');
+router.use(cors({ origin: ['http://localhost:4000'] }), bodyParser.json());
 
 router.get('/', async (request, response) => {
   try {

@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { PORT } = require('./utils');
+const { PORT } = require('./config');
 const app = express();
 
 app.use((request, response, next) => {
