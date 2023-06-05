@@ -4,8 +4,8 @@
 	"description": "This is a backend service which gathers company's financial data from trusted third party sources",
 	"main": "server.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"start": "nodemon server.js"
+		"start": "nodemon server.js",
+		"setup": "rm -rf node_modules package-lock.json && npm cache clean --force && npm install"
 	},
 	"author": "Vinay Mehta",
 	"license": "MIT",
